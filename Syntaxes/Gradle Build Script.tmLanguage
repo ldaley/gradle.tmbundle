@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>gradle</string>
+	</array>
+	<key>name</key>
+	<string>Gradle Build Script</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>include</key>
+			<string>#gradle-groovy</string>
+		</dict>
+	</array>
+	<key>repository</key>
+	<dict>
+		<key>gradle-groovy</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>source.groovy</string>
+				</dict>
+			</array>
+		</dict>
+	</dict>
+	<key>scopeName</key>
+	<string>source.groovy.gradle</string>
+	<key>uuid</key>
+	<string>D7E70EBB-ED68-4F09-A5AF-9126624AE319</string>
+</dict>
+</plist>

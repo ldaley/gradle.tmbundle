@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>autoScrollOutput</key>
+	<true/>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require ENV['TM_SUPPORT_PATH'] + '/lib/textmate'
+require ENV["TM_SUPPORT_PATH"] + "/lib/tm/process"
+require ENV["TM_SUPPORT_PATH"] + "/lib/ui"
+require ENV["TM_SUPPORT_PATH"] + "/lib/escape"
+require ENV["TM_SUPPORT_PATH"] + "/lib/tm/htmloutput"
+
+require "shellwords"
+require "pstore"
+
+class GradleMatePrefs
+  @@prefs = PStore.new(File.expand_path( "~/Library/Preferences/com.macromates.textmate.gradlemate"))
+  def self.get(key)
+    @@prefs.transaction { @@prefs[key] }
+  end
+  def self.set(key,value)
+    @@prefs.transaction { @@prefs[key] = value }
+  end
+end
+
+cmd = ["./gradlew"]
+prev_invocation = GradleMatePrefs.get("prev_invocation")
+invocation = TextMate::UI.request_string(:title =&gt; "GradleMate", :prompt =&gt; "Enter a gradle invocation:", :default =&gt; prev_invocation)
+GradleMatePrefs.set("prev_invocation", invocation) unless invocation.nil?
+
+dir = ENV['TM_PROJECT_DIRECTORY'] || ENV['TM_DIRECTORY']
+Dir.chdir(dir)
+TextMate::HTMLOutput.show(:window_title =&gt; "GradleMate", :page_title =&gt; "GradleMate", :sub_title =&gt; dir) do |io|
+  if invocation.nil?
+    io &lt;&lt; "Command cancelled."
+  else
+    cmd += Shellwords.shellwords(invocation)
+    io &lt;&lt; "&lt;strong&gt;#{htmlize(cmd.join(' '))}&lt;/strong&gt;&lt;br/&gt;"
+    io &lt;&lt; "&lt;pre&gt;"
+    TextMate::Process.run(cmd) do |str, type|
+      str.chomp!
+      str = "&lt;span style=\"#{type == :err ? 'color: red' : ''}\"&gt;#{htmlize(str)}&lt;/span&gt;"
+
+      # Link compile error messages to the source
+      str.sub! /^(.+?)(\/(?:.+\/)+.+\..+):\s?(\d+)(.+)$/, "\\1&lt;a href=\"javascript:TextMate.system('open \\\\'txmt://open/?url=file://\\2&amp;line=\\3\\\\'')\"&gt;\\2:\\3&lt;/a&gt;\\4"
+      
+      # Link test failures to the html report
+      str.sub! /^(.+Cause: There were failing tests. See the report at )((?:\/.+)+)\.(.+)$/, "\\1&lt;a href=\"javascript:TextMate.system('open \\\\'\\2/index.html\\\\'')\"&gt;\\2&lt;/a&gt;.\\3"
+      
+      io &lt;&lt; str + "\n"
+    end
+    io &lt;&lt; "&lt;/pre&gt;"
+  end
+end</string>
+	<key>input</key>
+	<string>none</string>
+	<key>keyEquivalent</key>
+	<string>^@g</string>
+	<key>name</key>
+	<string>Run Task</string>
+	<key>output</key>
+	<string>showAsHTML</string>
+	<key>uuid</key>
+	<string>18BAC303-8876-421D-AFCA-5438D0BDF687</string>
+</dict>
+</plist>
