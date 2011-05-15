@@ -5,6 +5,7 @@ require ENV["TM_SUPPORT_PATH"] + "/lib/tm/process"
 require ENV["TM_SUPPORT_PATH"] + "/lib/ui"
 require ENV["TM_SUPPORT_PATH"] + "/lib/escape"
 require ENV["TM_SUPPORT_PATH"] + "/lib/tm/htmloutput"
+require ENV['TM_SUPPORT_PATH'] + '/lib/tm/event'
 
 require ENV['TM_BUNDLE_SUPPORT'] + '/lib/gradle/prefs'
 
@@ -165,6 +166,8 @@ module Gradle
           end
           io << "</pre>"
         end
+        
+        TextMate.event("info.build.task.complete.gradle", "Gradle Task Complete", $? == 0 ? "Task Succeeded" : "Task Failed")
       end
     end
     
