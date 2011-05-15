@@ -49,3 +49,9 @@ The output message for each individual test class failure is linked to the corre
 The output message pointing to the HTML test report on test failure is converted into a link that when clicked opens the test report in your browser.
 
 ![prompt](https://github.com/alkemist/gradle.tmbundle/raw/master/screenshots/failedTestOutput.png)
+
+## Notifications
+
+At the end of the command, a Growl notification will be raised with the result of the command.
+
+![prompt](https://github.com/alkemist/gradle.tmbundle/raw/master/screenshots/growlNotifications.png)
