@@ -13,10 +13,10 @@ module Gradle
       @@prefs.transaction { @@prefs[key] = value }
     end
     
-    attr_reader :project
+    attr_reader :path
     
-    def initialize(project)
-      @project = project
+    def initialize(path)
+      @path = path
     end
     
     def get(key) 
@@ -30,7 +30,7 @@ module Gradle
     private
     
     def getKey(key) 
-      @project.path + "::" + key
+      @path + "::" + key
     end
     
   end

@@ -11,16 +11,16 @@
 
 require ENV['TM_BUNDLE_SUPPORT'] + '/lib/gradle/project'
 
-Gradle::Project.new.prompt_for_invocation_and_run</string>
+Gradle::Project.new.most_local_module.run("build")</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^@g</string>
 	<key>name</key>
-	<string>Run Task (project)…</string>
+	<string>Build (module)</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>
-	<string>18BAC303-8876-421D-AFCA-5438D0BDF687</string>
+	<string>4BDBEF0B-B881-43AE-B244-C991EE061AC4</string>
 </dict>
 </plist>

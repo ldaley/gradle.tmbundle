@@ -2,9 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-  <key>autoScrollOutput</key>
+	<key>autoScrollOutput</key>
 	<true/>
-	
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
@@ -12,16 +11,16 @@
 
 require ENV['TM_BUNDLE_SUPPORT'] + '/lib/gradle/project'
 
-Gradle::Project.new.run("check")</string>
+Gradle::Project.new.most_local_module.run("test")</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^@g</string>
 	<key>name</key>
-	<string>Check</string>
+	<string>Test (module)</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>
-	<string>8647F3E8-B676-4487-8588-12BB692E2B85</string>
+	<string>92BB6E22-941A-4674-86F8-416A26C71844</string>
 </dict>
 </plist>

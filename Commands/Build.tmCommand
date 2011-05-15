@@ -2,9 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-  <key>autoScrollOutput</key>
+	<key>autoScrollOutput</key>
 	<true/>
-	
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
@@ -18,10 +17,10 @@ Gradle::Project.new.run("build")</string>
 	<key>keyEquivalent</key>
 	<string>^@g</string>
 	<key>name</key>
-	<string>Build</string>
+	<string>Build (project)</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>
-	<string>56CC4E2A-09A2-491B-8BD2-8827320D93C0</string>
+	<string>BAEFD36A-2920-401C-8DBD-0E90A22E650F</string>
 </dict>
 </plist>

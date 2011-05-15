@@ -11,16 +11,16 @@
 
 require ENV['TM_BUNDLE_SUPPORT'] + '/lib/gradle/project'
 
-Gradle::Project.new.prompt_for_invocation_and_run</string>
+Gradle::Project.new.most_local_module.test_single</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^@g</string>
 	<key>name</key>
-	<string>Run Task (project)…</string>
+	<string>Test Selected File (module)</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>
-	<string>18BAC303-8876-421D-AFCA-5438D0BDF687</string>
+	<string>A5A2A0E0-CED2-4B1A-99A1-BD9FEDA6BF2D</string>
 </dict>
 </plist>

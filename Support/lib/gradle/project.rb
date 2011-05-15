@@ -14,15 +14,100 @@ require "shellwords"
 module Gradle
   class Project
     
+    class Module 
+      attr_reader :project, :path, :prefix, :prefs
+      
+      def initialize(project, path)
+        @project = project
+        @path = path
+        @prefs = Prefs.new(path)
+        
+        if path == project.path
+          @prefix = ""
+        else
+          @prefix = (path[project.path.length + 1..-1].sub "/", ":") + ":"
+        end
+      end
+      
+      def prefix_task(task) 
+        @prefix + task
+      end
+      
+      def test_single(file = ENV['TM_SELECTED_FILE'])
+        run("test", @project.test_single_arg(file))
+      end
+      
+      def prompt_for_invocation_and_run
+        previous = @prefs.get("prev_invocation")
+        invocation = TextMate::UI.request_string(
+          :title => "GradleMate", 
+          :prompt => "Enter a gradle invocation" + (@prefix ? " (for “#{@prefix[0..-2]}”):" : ''), 
+          :default => previous
+        )
+        
+        if invocation.nil?
+          puts "Command cancelled"
+          false
+        else
+          @prefs.set("prev_invocation", invocation) unless invocation.nil?
+          run_string(invocation)
+          true
+        end
+      end
+
+      def run_string(command)
+        run(*Shellwords.shellwords(command))
+      end
+      
+      def run(*args)
+        prefixed_args = args.collect { |a| a[0..0] == "-" ? a : prefix_task(a) }
+        @project.run(prefixed_args)
+      end
+    end
+    
     attr_reader :path, :prefs
     
     def initialize(path = nil)
       @path = path || ENV['TM_PROJECT_DIRECTORY']
-      @prefs = Prefs.new(self)
+      @prefs = Prefs.new(path)
       
       assert_is_gradle_project
     end
 
+    def most_local_module(file = ENV['TM_SELECTED_FILE'])
+      if file.nil?
+        puts "No file selection"
+        exit 1
+      elsif !File.file? file
+        puts "#{file} is not a file"
+        exit 1
+      end
+      
+      parent = File.expand_path("#{file}/..")
+      while parent != @path do
+        if File.exists? "#{parent}/build.gradle"
+          return Module.new(self, parent)
+        end
+        parent = File.expand_path("#{parent}/..")
+      end
+      
+      return Module.new(self, @path)
+    end
+    
+    def test_single_arg(file = ENV['TM_SELECTED_FILE']) 
+      if file.nil?
+        puts "No file selection"
+        exit 1
+      end
+      
+      clazz = File.basename(file, File.extname(file))
+      "-Dtest.single=#{clazz}"
+    end
+    
+    def test_single(file = ENV['TM_SELECTED_FILE'])
+      run("test", test_single_arg(file))
+    end
+    
     def prompt_for_invocation_and_run
       previous = @prefs.get("prev_invocation")
       invocation = TextMate::UI.request_string(:title => "GradleMate", :prompt => "Enter a gradle invocation:", :default => previous)
@@ -37,7 +122,7 @@ module Gradle
     end
     
     def run_string(command)
-      run(Shellwords.shellwords(command))
+      run(*Shellwords.shellwords(command))
     end
     
     def run(*args)
@@ -101,5 +186,6 @@ module Gradle
       
       nil
     end
+    
   end  
 end
