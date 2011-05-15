@@ -14,4 +14,6 @@ The filename and line number of output as part of each compile error for Java an
 
 ### Failed Tests
 
+The output message for each individual test class failure is linked to the corresponding XML test report which will open in TextMate when clicked.
+
 The output message pointing to the HTML test report on test failure is converted into a link that when clicked opens the test report in your browser.

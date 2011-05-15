@@ -15,6 +15,7 @@ require ENV["TM_SUPPORT_PATH"] + "/lib/ui"
 require ENV["TM_SUPPORT_PATH"] + "/lib/escape"
 require ENV["TM_SUPPORT_PATH"] + "/lib/tm/htmloutput"
 
+require 'find'
 require "shellwords"
 require "pstore"
 
@@ -28,13 +29,15 @@ class GradleMatePrefs
   end
 end
 
+dir = ENV['TM_PROJECT_DIRECTORY'] || ENV['TM_DIRECTORY']
+Dir.chdir(dir)
+
+
 cmd = ["./gradlew"]
 prev_invocation = GradleMatePrefs.get("prev_invocation")
 invocation = TextMate::UI.request_string(:title =&gt; "GradleMate", :prompt =&gt; "Enter a gradle invocation:", :default =&gt; prev_invocation)
 GradleMatePrefs.set("prev_invocation", invocation) unless invocation.nil?
 
-dir = ENV['TM_PROJECT_DIRECTORY'] || ENV['TM_DIRECTORY']
-Dir.chdir(dir)
 TextMate::HTMLOutput.show(:window_title =&gt; "GradleMate", :page_title =&gt; "GradleMate", :sub_title =&gt; dir) do |io|
   if invocation.nil?
     io &lt;&lt; "Command cancelled."
@@ -46,6 +49,26 @@ TextMate::HTMLOutput.show(:window_title =&gt; "GradleMate", :page_title =&gt; "G
       str.chomp!
       str = "&lt;span style=\"#{type == :err ? 'color: red' : ''}\"&gt;#{htmlize(str)}&lt;/span&gt;"
 
+      # Link individual test failures to their xml report files
+      if str =~ /Test (.*) FAILED/
+        testname = $1
+        Find.find(dir) do |path|
+          base = File.basename(path)
+          if FileTest.directory?(path)
+            if base[0] == ?. or path =~ /build\/(?!test-results$)/
+              Find.prune
+            else
+              next
+            end
+          else
+            if base == "TEST-#{testname}.xml"
+              str.sub! /Test (.*) FAILED/, "Test &lt;a href=\"javascript:TextMate.system('open \\\\'txmt://open/?url=file://#{path}\\\\'')\"&gt;\\1&lt;/a&gt; FAILED"
+              break
+            end
+          end
+        end
+      end
+      
       # Link compile error messages to the source
       str.sub! /^(.+?)(\/(?:.+\/)+.+\..+):\s?(\d+)(.+)$/, "\\1&lt;a href=\"javascript:TextMate.system('open \\\\'txmt://open/?url=file://\\2&amp;line=\\3\\\\'')\"&gt;\\2:\\3&lt;/a&gt;\\4"
       
