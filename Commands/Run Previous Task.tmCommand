@@ -11,13 +11,13 @@
 
 require ENV['TM_BUNDLE_SUPPORT'] + '/lib/gradle/project'
 
-Gradle::Project.new.run_previous_task</string>
+Gradle::Project.new.run_previous_command</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^@g</string>
 	<key>name</key>
-	<string>Run Previous Task</string>
+	<string>Run Previous Command</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>

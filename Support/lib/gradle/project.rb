@@ -38,20 +38,20 @@ module Gradle
         run("test", @project.test_single_arg(file))
       end
       
-      def prompt_for_invocation_and_run
+      def prompt_for_command_and_run
         previous = @prefs.get("prev_prompt")
-        invocation = TextMate::UI.request_string(
+        command = TextMate::UI.request_string(
           :title => "GradleMate", 
-          :prompt => "Enter a gradle invocation" + (@prefix ? " (for “#{@prefix[0..-2]}”):" : ''), 
+          :prompt => "Enter a gradle command" + (@prefix.empty? ? ' (for root module):' : " (for “#{@prefix[0..-2]}”):"), 
           :default => previous
         )
         
-        if invocation.nil?
+        if command.nil?
           puts "Command cancelled"
           false
         else
-          @prefs.set("prev_prompt", invocation) unless invocation.nil?
-          run_string(invocation)
+          @prefs.set("prev_prompt", command) unless command.nil?
+          run_string(command)
           true
         end
       end
@@ -109,25 +109,25 @@ module Gradle
       run("test", test_single_arg(file))
     end
     
-    def run_previous_task
-      previous = @prefs.get("previous_task")
+    def run_previous_command
+      previous = @prefs.get("previous_command")
       if previous.nil?
-        puts "No previous task for this project"
+        puts "No previous command for this project"
         exit 1
       end
       
       run(previous)
     end
     
-    def prompt_for_invocation_and_run
+    def prompt_for_command_and_run
       previous = @prefs.get("prev_prompt")
-      invocation = TextMate::UI.request_string(:title => "GradleMate", :prompt => "Enter a gradle invocation:", :default => previous)
-      if invocation.nil?
+      command = TextMate::UI.request_string(:title => "GradleMate", :prompt => "Enter a gradle command:", :default => previous)
+      if command.nil?
         puts "Command cancelled"
         false
       else
-        @prefs.set("prev_prompt", invocation) unless invocation.nil?
-        run_string(invocation)
+        @prefs.set("prev_prompt", command) unless command.nil?
+        run_string(command)
         true
       end
     end
@@ -137,7 +137,7 @@ module Gradle
     end
     
     def run(*args)
-      @prefs.set("previous_task", args)
+      @prefs.set("previous_command", args)
       Dir.chdir(@path) do
         TextMate::HTMLOutput.show(:window_title => "GradleMate", :page_title => "GradleMate", :sub_title => @path) do |io|
           cmd = ["./gradlew"] + args
@@ -178,7 +178,7 @@ module Gradle
           io << "</pre>"
         end
         
-        TextMate.event("info.build.task.complete.gradle", "Gradle Task Complete", $? == 0 ? "Task Succeeded" : "Task Failed")
+        TextMate.event("info.build.complete.gradle", "Gradle Command Complete", $? == 0 ? "Command Succeeded" : "Command Failed")
       end
     end
     

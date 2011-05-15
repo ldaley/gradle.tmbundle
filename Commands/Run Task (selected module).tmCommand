@@ -11,13 +11,13 @@
 
 require ENV['TM_BUNDLE_SUPPORT'] + '/lib/gradle/project'
 
-Gradle::Project.new.most_local_module.prompt_for_invocation_and_run</string>
+Gradle::Project.new.most_local_module.prompt_for_command_and_run</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^@g</string>
 	<key>name</key>
-	<string>Run Task (module)…</string>
+	<string>Run Command (module)…</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>
