@@ -46,6 +46,7 @@ module Gradle
           cmd = ["./gradlew"] + args
           io << "<strong>#{htmlize(cmd.join(' '))}</strong><br/>"
           io << "<pre>"
+          
           TextMate::Process.run(cmd) do |str, type|
             str.chomp!
             str = "<span style=\"#{type == :err ? 'color: red' : ''}\">#{htmlize(str)}</span>"
@@ -53,20 +54,9 @@ module Gradle
             # Link individual test failures to their xml report files
             if str =~ /Test (.*) FAILED/
               testname = $1
-              Find.find(@path) do |path|
-                base = File.basename(path)
-                if FileTest.directory?(path)
-                  if base[0] == ?. or path =~ /build\/(?!test-results$)/
-                    Find.prune
-                  else
-                    next
-                  end
-                else
-                  if base == "TEST-#{testname}.xml"
-                    str.sub! /Test (.*) FAILED/, "Test <a href=\"javascript:TextMate.system('open \\\\'txmt://open/?url=file://#{path}\\\\'')\">\\1</a> FAILED"
-                    break
-                  end
-                end
+              testfile = path_to_test_result(testname)
+              unless testfile.nil?
+                str.sub! /Test (.*) FAILED/, "Test <a href=\"javascript:TextMate.system('open \\\\'txmt://open/?url=file://#{testfile}\\\\'')\">\\1</a> FAILED"
               end
             end
 
@@ -89,11 +79,27 @@ module Gradle
     private 
     
     def assert_is_gradle_project
-      unless File::exists?("gradlew")
+      unless File::exists?("#{@path}/gradlew")
         puts "#{@path} does not appear to be a Gradle project, no “gradlew” script found"
         exit 1
       end
     end
     
+    def path_to_test_result(clazz) 
+      Find.find(@path) do |path|
+        base = File.basename(path)
+        if FileTest.directory?(path)
+          if base[0] == ?. or path =~ /build\/(?!test-results$)/
+            Find.prune
+          else
+            next
+          end
+        else
+          return path if base == "TEST-#{clazz}.xml"
+        end
+      end
+      
+      nil
+    end
   end  
 end
