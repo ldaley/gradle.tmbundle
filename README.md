@@ -6,9 +6,9 @@ Provides the ability to run [Gradle](http://www.gradle.org/ "Home - Gradle") com
 
 To run a Gradle command, with any file open, press `⌃⌘G` (`control` + `command` + `G`) to bring up the Gradle task menu. There is a predefined set of common tasks, and a “Run Task…” command that will prompt with a dialog where you can enter the arguments to be passed to `gradlew`.
 
-### Localising to modules
+The command menu contains items with `(module)` and `(project)` suffixes. The _module_ commands target the module of the currently selected file in the editor, while the _project_ commands operate on the root project.
 
-The command menu contains items with a `(selected module)` suffix. These commands specifically target the module of the open file in the editor.
+The “Run Previous Task” command will always re-run the most recently executed task, regardless of whether it was a project or module task.
 
 > The current mechanism for finding the module for the open file relies on a `build.gradle` file being present in the module directory, and the name of the module being the logical name based on the directory's location in the project. This will be improved in future versions of this bundle.
 
