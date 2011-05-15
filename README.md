@@ -1,10 +1,10 @@
 Provides the ability to run [Gradle](http://www.gradle.org/ "Home - Gradle") commands from within [TextMate](http://macromates.com/ "TextMate — The Missing Editor for Mac OS X").
 
+> To use this bundle, you **MUST** have the Gradle wrapper script (i.e. `gradlew`) installed at the root of the directory that you have open in TextMate.
+
 ## Running commands
 
-To run a Gradle command, with any file open, press `⌃⌘G` (`control` + `command` + `G`). You'll be prompted with a dialog where you can enter the arguments to be passed to `gradlew`. The dialog will prepopulated with the previous Gradle command.
-
-To use this feature, you **MUST** have the Gradle wrapper script (i.e. `gradlew`) installed at the root of the directory that you have open in TextMate.
+To run a Gradle command, with any file open, press `⌃⌘G` (`control` + `command` + `G`) to bring up the Gradle task menu. There is a predefined set of common tasks, and a “Run Task…” command that will prompt with a dialog where you can enter the arguments to be passed to `gradlew`. 
 
 ## Output Filtering Features
 

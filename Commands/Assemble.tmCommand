@@ -2,7 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>autoScrollOutput</key>
+  <key>autoScrollOutput</key>
 	<true/>
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
@@ -11,16 +11,16 @@
 
 require ENV['TM_BUNDLE_SUPPORT'] + '/lib/gradle/project'
 
-Gradle::Project.new.prompt_for_invocation_and_run</string>
+Gradle::Project.new.run("assemble")</string>
 	<key>input</key>
 	<string>none</string>
 	<key>keyEquivalent</key>
 	<string>^@g</string>
 	<key>name</key>
-	<string>Run Task…</string>
+	<string>Assemble</string>
 	<key>output</key>
 	<string>showAsHTML</string>
 	<key>uuid</key>
-	<string>18BAC303-8876-421D-AFCA-5438D0BDF687</string>
+	<string>EBB06AF0-3FD7-45C3-9EB8-B24017BBC037</string>
 </dict>
 </plist>

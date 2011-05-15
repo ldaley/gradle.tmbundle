@@ -2,14 +2,39 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>name</key>
-	<string>Gradle</string>
 	<key>contactEmailRot13</key>
 	<string>yq@yqnyrl.pbz</string>
 	<key>contactName</key>
 	<string>Luke Daley</string>
 	<key>description</key>
 	<string>A bundle for the &lt;a href="http://gradle.org/"&gt;Gradle&lt;/a&gt; build tool.</string>
+	<key>mainMenu</key>
+	<dict>
+		<key>items</key>
+		<array>
+			<string>DCC053B2-0B53-443C-A3C0-DC0DC007D818</string>
+			<string>45890847-2738-4B2E-9D90-936F632DB9FF</string>
+			<string>56CC4E2A-09A2-491B-8BD2-8827320D93C0</string>
+			<string>8647F3E8-B676-4487-8588-12BB692E2B85</string>
+			<string>EBB06AF0-3FD7-45C3-9EB8-B24017BBC037</string>
+			<string>------------------------------------</string>
+			<string>18BAC303-8876-421D-AFCA-5438D0BDF687</string>
+		</array>
+		<key>submenus</key>
+		<dict/>
+	</dict>
+	<key>name</key>
+	<string>Gradle</string>
+	<key>ordering</key>
+	<array>
+		<string>D7E70EBB-ED68-4F09-A5AF-9126624AE319</string>
+		<string>18BAC303-8876-421D-AFCA-5438D0BDF687</string>
+		<string>DCC053B2-0B53-443C-A3C0-DC0DC007D818</string>
+		<string>56CC4E2A-09A2-491B-8BD2-8827320D93C0</string>
+		<string>45890847-2738-4B2E-9D90-936F632DB9FF</string>
+		<string>EBB06AF0-3FD7-45C3-9EB8-B24017BBC037</string>
+		<string>8647F3E8-B676-4487-8588-12BB692E2B85</string>
+	</array>
 	<key>uuid</key>
 	<string>B1FFE4CD-5ABE-4D21-87B6-543C31692736</string>
 </dict>
