@@ -141,7 +141,7 @@ module Gradle
       Dir.chdir(@path) do
         TextMate::HTMLOutput.show(:window_title => "GradleMate", :page_title => "GradleMate", :sub_title => @path) do |io|
           cmd = ["./gradlew"] + args
-          io << "<strong>#{htmlize(cmd.join(' '))}</strong><br/>"
+          io << "<span style='font-size: 120%'>#{htmlize(cmd.join(' '))}</span><br/>"
           io << "<pre>"
           
           TextMate::Process.run(cmd) do |str, type|
@@ -158,7 +158,7 @@ module Gradle
             end
 
             # Italicise the task names
-            str.sub! /(<.+?>)(:(?:.+:?)+)/, "\\1<span style='font-style: italic'>\\2</span>"
+            str.sub! /^(<.+?>)((?::.+?)*:\S+)/, "\\1<span style='font-style: italic; color: LightSteelBlue'>\\2</span>"
             
             # Link compile error messages to the source
             str.sub! /^(.+?)(\/(?:.+\/)+.+\..+):\s?(\d+)(.+)$/, "\\1<a href=\"javascript:TextMate.system('open \\\\'txmt://open/?url=file://\\2&line=\\3\\\\'')\">\\2:\\3</a>\\4"
@@ -167,11 +167,11 @@ module Gradle
             str.sub! /^(.+Cause: There were failing tests. See the report at )((?:\/.+)+)\.(.+)$/, "\\1<a href=\"javascript:TextMate.system('open \\\\'\\2/index.html\\\\'')\">\\2</a>.\\3"
 
             # Colorise the UP-TO-DATE suffix
-            str.sub! /UP-TO-DATE/, "<span style='color: yellow'>UP-TO-DATE</span>"
+            str.sub! /UP-TO-DATE/, "<span style='color: Moccasin'>UP-TO-DATE</span>"
 
             # Colorise the build status
-            str.sub! /BUILD SUCCESSFUL/, "<span style='color: green'>BUILD SUCCESSFUL</span>"
-            str.sub! /BUILD FAILED/, "<span style='color: red'>BUILD FAILED</span>"
+            str.sub! /BUILD SUCCESSFUL/, "<span style='color: green; text-decoration: underline'>BUILD SUCCESSFUL</span>"
+            str.sub! /BUILD FAILED/, "<span style='color: red; text-decoration: underline'>BUILD FAILED</span>"
             
             io << str + "\n"
           end
