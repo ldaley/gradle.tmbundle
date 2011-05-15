@@ -75,6 +75,9 @@ TextMate::HTMLOutput.show(:window_title =&gt; "GradleMate", :page_title =&gt; "G
       # Link test failures to the html report
       str.sub! /^(.+Cause: There were failing tests. See the report at )((?:\/.+)+)\.(.+)$/, "\\1&lt;a href=\"javascript:TextMate.system('open \\\\'\\2/index.html\\\\'')\"&gt;\\2&lt;/a&gt;.\\3"
       
+      # Colorise the UP-TO-DATE suffix
+      str.sub! /UP-TO-DATE/, "&lt;span style='color: yellow'&gt;UP-TO-DATE&lt;/span&gt;"
+      
       io &lt;&lt; str + "\n"
     end
     io &lt;&lt; "&lt;/pre&gt;"
