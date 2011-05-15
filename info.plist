@@ -23,6 +23,8 @@
 			<string>BAEFD36A-2920-401C-8DBD-0E90A22E650F</string>
 			<string>45890847-2738-4B2E-9D90-936F632DB9FF</string>
 			<string>18BAC303-8876-421D-AFCA-5438D0BDF687</string>
+			<string>------------------------------------</string>
+			<string>D052BD31-478C-481C-8016-E09F20C69B76</string>
 		</array>
 		<key>submenus</key>
 		<dict/>
@@ -42,6 +44,7 @@
 		<string>45890847-2738-4B2E-9D90-936F632DB9FF</string>
 		<string>BAEFD36A-2920-401C-8DBD-0E90A22E650F</string>
 		<string>18BAC303-8876-421D-AFCA-5438D0BDF687</string>
+		<string>D052BD31-478C-481C-8016-E09F20C69B76</string>
 	</array>
 	<key>uuid</key>
 	<string>B1FFE4CD-5ABE-4D21-87B6-543C31692736</string>

@@ -39,7 +39,7 @@ module Gradle
       end
       
       def prompt_for_invocation_and_run
-        previous = @prefs.get("prev_invocation")
+        previous = @prefs.get("prev_prompt")
         invocation = TextMate::UI.request_string(
           :title => "GradleMate", 
           :prompt => "Enter a gradle invocation" + (@prefix ? " (for “#{@prefix[0..-2]}”):" : ''), 
@@ -50,7 +50,7 @@ module Gradle
           puts "Command cancelled"
           false
         else
-          @prefs.set("prev_invocation", invocation) unless invocation.nil?
+          @prefs.set("prev_prompt", invocation) unless invocation.nil?
           run_string(invocation)
           true
         end
@@ -70,7 +70,7 @@ module Gradle
     
     def initialize(path = nil)
       @path = path || ENV['TM_PROJECT_DIRECTORY']
-      @prefs = Prefs.new(path)
+      @prefs = Prefs.new(@path)
       
       assert_is_gradle_project
     end
@@ -109,14 +109,24 @@ module Gradle
       run("test", test_single_arg(file))
     end
     
+    def run_previous_task
+      previous = @prefs.get("previous_task")
+      if previous.nil?
+        puts "No previous task for this project"
+        exit 1
+      end
+      
+      run(previous)
+    end
+    
     def prompt_for_invocation_and_run
-      previous = @prefs.get("prev_invocation")
+      previous = @prefs.get("prev_prompt")
       invocation = TextMate::UI.request_string(:title => "GradleMate", :prompt => "Enter a gradle invocation:", :default => previous)
       if invocation.nil?
         puts "Command cancelled"
         false
       else
-        @prefs.set("prev_invocation", invocation) unless invocation.nil?
+        @prefs.set("prev_prompt", invocation) unless invocation.nil?
         run_string(invocation)
         true
       end
@@ -127,6 +137,7 @@ module Gradle
     end
     
     def run(*args)
+      @prefs.set("previous_task", args)
       Dir.chdir(@path) do
         TextMate::HTMLOutput.show(:window_title => "GradleMate", :page_title => "GradleMate", :sub_title => @path) do |io|
           cmd = ["./gradlew"] + args
