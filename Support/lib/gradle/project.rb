@@ -145,6 +145,9 @@ module Gradle
               end
             end
 
+            # Italicise the task names
+            str.sub! /(<.+?>)(:(?:.+:?)+)/, "\\1<span style='font-style: italic'>\\2</span>"
+            
             # Link compile error messages to the source
             str.sub! /^(.+?)(\/(?:.+\/)+.+\..+):\s?(\d+)(.+)$/, "\\1<a href=\"javascript:TextMate.system('open \\\\'txmt://open/?url=file://\\2&line=\\3\\\\'')\">\\2:\\3</a>\\4"
 
@@ -154,6 +157,10 @@ module Gradle
             # Colorise the UP-TO-DATE suffix
             str.sub! /UP-TO-DATE/, "<span style='color: yellow'>UP-TO-DATE</span>"
 
+            # Colorise the build status
+            str.sub! /BUILD SUCCESSFUL/, "<span style='color: green'>BUILD SUCCESSFUL</span>"
+            str.sub! /BUILD FAILED/, "<span style='color: red'>BUILD FAILED</span>"
+            
             io << str + "\n"
           end
           io << "</pre>"
