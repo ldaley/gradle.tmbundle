@@ -95,6 +95,15 @@ module Gradle
       return Module.new(self, @path)
     end
     
+    def open_test_result(clazz)
+      test_result = path_to_test_result(clazz)
+      if test_result
+        TextMate.go_to(:file => test_result)
+      else
+        TextMate::UI.tool_tip("Could not find test result file for #{clazz}")
+      end
+    end  
+    
     def test_single_arg(file = ENV['TM_SELECTED_FILE']) 
       if file.nil?
         puts "No file selection"
@@ -149,14 +158,7 @@ module Gradle
             str = "<span style=\"#{type == :err ? 'color: red' : ''}\">#{htmlize(str)}</span>"
 
             # Link individual test failures to their xml report files
-            if str =~ /Test (.+) FAILED/
-              testname = $1
-              puts "matched #{$1}"
-              testfile = path_to_test_result(testname)
-              unless testfile.nil?
-                str.sub! /Test (.+) FAILED/, "Test <a href=\"javascript:TextMate.system('open \\\\'txmt://open/?url=file://#{testfile}\\\\'')\">\\1</a> FAILED"
-              end
-            end
+            str.sub! /Test (.+) FAILED/, "Test <a href=\"javascript:TextMate.system('\\\\'#{ENV['TM_BUNDLE_SUPPORT']}/bin/open_test_result.rb\\\\' \\\\'\\1\\\\'')\">\\1</a> FAILED"
 
             # Italicise the task names
             str.sub! /^(<.+?>)((?::.+?)*:\S+)/, "\\1<span style='font-style: italic; color: LightSteelBlue'>\\2</span>"
@@ -168,7 +170,7 @@ module Gradle
             str.sub! /^(.+Cause: There were failing tests. See the report at )((?:\/.+)+)\.(.+)$/, "\\1<a href=\"javascript:TextMate.system('open \\\\'\\2/index.html\\\\'')\">\\2</a>.\\3"
 
             # Link build file errors
-            str.sub! /^(<.+?>Build file ')(.+)(')( line: (\d+))?/, "\\1<a href=\"javascript:TextMate.system('open \\\\'txmt://open/?url=file://\\2&line=\\5\\\\'')\">\\2</a>\\3\\4"
+            str.sub! /^(<.+?>(?:Build file|Script) ')(.+)(')( line: (\d+))?/, "\\1<a href=\"javascript:TextMate.system('open \\\\'txmt://open/?url=file://\\2&line=\\5\\\\'')\">\\2</a>\\3\\4"
             
             # Colorise the UP-TO-DATE suffix
             str.sub! /UP-TO-DATE/, "<span style='color: Moccasin'>UP-TO-DATE</span>"
@@ -183,6 +185,7 @@ module Gradle
         end
         
         TextMate.event("info.build.complete.gradle", "Gradle Command Complete", $? == 0 ? "Command Succeeded" : "Command Failed")
+        TextMate.rescan_project
       end
     end
     
@@ -200,6 +203,7 @@ module Gradle
         base = File.basename(path)
         if FileTest.directory?(path)
           if base[0] == ?. or path =~ /build\/(?!test-results$)/
+            puts "pruning #{path}"
             Find.prune
           else
             next
