@@ -164,7 +164,7 @@ module Gradle
             str.sub! /^(<.+?>)((?::.+?)*:\S+)/, "\\1<span style='font-style: italic; color: LightSteelBlue'>\\2</span>"
             
             # Link compile error messages to the source
-            str.sub! /^(<.+?>)(\/(?:.+\/)+.+\..+):\s?(\d+)(.+)$/, "\\1<a href=\"javascript:TextMate.system('open \\\\'txmt://open/?url=file://\\2&line=\\3\\\\'')\">\\2:\\3</a>\\4"
+            str.sub! /^(<.+?>)(\/(?:.+?\/)+.+?\..+?):\s?(\d+)(.+)$/, "\\1<a href=\"javascript:TextMate.system('open \\\\'txmt://open/?url=file://\\2&line=\\3\\\\'')\">\\2:\\3</a>\\4"
 
             # Link test failures to the html report
             str.sub! /^(.+Cause: There were failing tests. See the report at )((?:\/.+)+)\.(.+)$/, "\\1<a href=\"javascript:TextMate.system('open \\\\'\\2/index.html\\\\'')\">\\2</a>.\\3"
