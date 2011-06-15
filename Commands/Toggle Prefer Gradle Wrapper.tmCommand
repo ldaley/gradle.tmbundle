@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby
+
+require ENV['TM_BUNDLE_SUPPORT'] + '/lib/gradle/project'
+require ENV['TM_SUPPORT_PATH'] + '/lib/tm/event'
+
+msg = ""
+if Gradle::Project.new.toggle_prefer_gradlew
+	msg = "The Gradle Wrapper is now preferred"
+else
+	msg = "The Gradle Wrapper is now NOT preferred"
+end
+
+TextMate.event("info.build.settings.gradle", "Gradle Preferences Changed", msg)</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Toggle Prefer Gradle Wrapper</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>uuid</key>
+	<string>81F9ED20-8CCE-4B1D-90E9-CD2797BB18EE</string>
+</dict>
+</plist>

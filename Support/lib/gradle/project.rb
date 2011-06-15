@@ -139,11 +139,33 @@ module Gradle
       run(*Shellwords.shellwords(command))
     end
     
+    def has_gradlew
+      File.executable? "#{@path}/gradlew"
+    end
+    
+    def prefer_gradlew 
+      prefer = @prefs.get("prefer_gradlew")
+      prefer.nil? ? true : prefer
+    end
+    
+    def toggle_prefer_gradlew
+      @prefs.set("prefer_gradlew", !prefer_gradlew)
+      prefer_gradlew
+    end
+    
+    def gradle_command
+      if has_gradlew and prefer_gradlew 
+        "./gradlew"
+      else
+        "gradle"
+      end
+    end
+    
     def run(*args)
       @prefs.set("previous_command", args)
       Dir.chdir(@path) do
         TextMate::HTMLOutput.show(:window_title => "GradleMate", :page_title => "GradleMate", :sub_title => @path) do |io|
-          cmd = ["./gradlew"] + args
+          cmd = [gradle_command] + args
           io << "<span style='font-size: 120%'>#{htmlize(cmd.join(' '))}</span><br/>"
           io << "<pre>"
           
@@ -186,8 +208,8 @@ module Gradle
     private 
     
     def assert_is_gradle_project
-      unless File::exists?("#{@path}/gradlew")
-        puts "#{@path} does not appear to be a Gradle project, no “gradlew” script found"
+      if Dir.glob("#{@path}/*.gradle").empty?
+        puts "#{@path} does not appear to be a Gradle project, no “*.gradle” files found @ “#{path}”"
         exit 1
       end
     end

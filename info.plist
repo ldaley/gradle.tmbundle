@@ -25,15 +25,28 @@
 			<string>18BAC303-8876-421D-AFCA-5438D0BDF687</string>
 			<string>------------------------------------</string>
 			<string>D052BD31-478C-481C-8016-E09F20C69B76</string>
+			<string>------------------------------------</string>
+			<string>E234D2D4-F08E-4937-9692-A2D7AC7C5870</string>
 		</array>
 		<key>submenus</key>
-		<dict/>
+		<dict>
+			<key>E234D2D4-F08E-4937-9692-A2D7AC7C5870</key>
+			<dict>
+				<key>items</key>
+				<array>
+					<string>81F9ED20-8CCE-4B1D-90E9-CD2797BB18EE</string>
+				</array>
+				<key>name</key>
+				<string>Settings</string>
+			</dict>
+		</dict>
 	</dict>
 	<key>name</key>
 	<string>Gradle</string>
 	<key>ordering</key>
 	<array>
 		<string>D7E70EBB-ED68-4F09-A5AF-9126624AE319</string>
+		<string>81F9ED20-8CCE-4B1D-90E9-CD2797BB18EE</string>
 		<string>92BB6E22-941A-4674-86F8-416A26C71844</string>
 		<string>A5A2A0E0-CED2-4B1A-99A1-BD9FEDA6BF2D</string>
 		<string>27BABDCB-E3E9-4D6C-B41E-1F6C78AF6D13</string>
