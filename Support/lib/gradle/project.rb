@@ -86,9 +86,7 @@ module Gradle
       
       parent = File.expand_path("#{file}/..")
       while parent != @path do
-        if File.exists? "#{parent}/build.gradle"
-          return Module.new(self, parent)
-        end
+        return Module.new(self, parent) unless Dir.glob("#{parent}\/*.gradle").empty?
         parent = File.expand_path("#{parent}/..")
       end
       
