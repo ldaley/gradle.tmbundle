@@ -11,27 +11,23 @@ require ENV['TM_BUNDLE_SUPPORT'] + '/lib/gradle/prefs'
 
 require 'find'
 require "shellwords"
+require "open3"
 
 module Gradle
   class Project
     
     class Module 
-      attr_reader :project, :path, :prefix, :prefs
+      attr_reader :project, :path, :name, :prefix, :prefs
       
-      def initialize(project, path)
+      def initialize(project, path, name)
         @project = project
         @path = path
+        @name = name
         @prefs = Prefs.new(path)
-        
-        if path == project.path
-          @prefix = ""
-        else
-          @prefix = (path[project.path.length + 1..-1].sub "/", ":") + ":"
-        end
       end
       
       def prefix_task(task) 
-        @prefix + task
+        @name.empty? ? task : "#{name}:#{task}"
       end
       
       def test_single(file = ENV['TM_SELECTED_FILE'])
@@ -42,7 +38,7 @@ module Gradle
         previous = @prefs.get("prev_prompt")
         command = TextMate::UI.request_string(
           :title => "GradleMate", 
-          :prompt => "Enter a gradle command" + (@prefix.empty? ? ' (for root module):' : " (for “#{@prefix[0..-2]}”):"), 
+          :prompt => "Enter a gradle command" + (@name.empty? ? ' (for root module):' : " (for “#{@name}”):"), 
           :default => previous
         )
         
@@ -86,11 +82,11 @@ module Gradle
       
       parent = File.expand_path("#{file}/..")
       while parent != @path do
-        return Module.new(self, parent) unless Dir.glob("#{parent}\/*.gradle").empty?
+        return module_at_path(parent) unless Dir.glob("#{parent}\/*.gradle").empty?
         parent = File.expand_path("#{parent}/..")
       end
       
-      return Module.new(self, @path)
+      module_at_path @path
     end
     
     def open_test_result(clazz)
@@ -214,5 +210,35 @@ module Gradle
       nil
     end
     
+    def module_at_path(path) 
+      Module.new(self, path, module_path_to_name(path))
+    end
+    
+    def module_path_to_name(path) 
+      if path == @path
+        return ""
+      end
+      
+      path = path[@path.length + 1..-1].sub "/", ":"
+      transformer = get_config_file("transform-gradle-project-path")
+      if File.executable?(transformer)
+        transformedPath = Open3.popen3(transformer) { |stdin, stdout, stderr|
+          stdin.puts path
+          stdin.close
+          stdout.read.chomp
+        }
+        raise "“#{transformer}” returned non zero: #{exitstatus}" unless $?.exitstatus == 0
+        if transformedPath.nil?
+          raise "“#{transformer}” script did not return anything"
+        end
+        transformedPath
+      else
+        path  
+      end
+    end
+    
+    def get_config_file(name) 
+      "#{@path}/.textmate/#{name}"
+    end
   end  
 end

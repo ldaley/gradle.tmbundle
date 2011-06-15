@@ -14,15 +14,50 @@ There is a predefined set of common tasks, and a “Run Command…” item that 
 
 ![output](https://github.com/alkemist/gradle.tmbundle/raw/master/screenshots/projectCommandOutput.png)
 
+### Targeting
+
 The command menu contains items with `(module)` and `(project)` suffixes. The _module_ commands target the module of the currently selected file in the editor, while the _project_ commands operate on the root project.
+
+> The current mechanism for finding the module for the open file relies on a `*.gradle` file being present in the module directory.
 
 ![prompt](https://github.com/alkemist/gradle.tmbundle/raw/master/screenshots/modulePrompt.png)
 
 ![output](https://github.com/alkemist/gradle.tmbundle/raw/master/screenshots/moduleCommandOutput.png)
 
-The “Run Previous Command” item will always re-run the most recently executed command, regardless of whether it was a project or module targeted command.
+### Project Structure
 
-> The current mechanism for finding the module for the open file relies on a `build.gradle` file being present in the module directory, and the name of the module being the logical name based on the directory's location in the project. This will be improved in future versions of this bundle.
+The default behaviour is to determine the module name by taking it's relative path from the project root and substituting the forward slashes with colons. So given the following project structure…
+
+    modules/module-a
+    modules/module-b
+
+The bundle will use the following as the names for the modules…
+
+    modules:module-a
+    modules:module-b
+
+However you may have your `settings.gradle` file configured to use a different convention. If so, you need to provide a “transformer” script that generates the right module names. You might want the names to be `module-a` and `module-b` (i.e. no *modules* prefix). Your `settings.gradle` would look like…
+
+    include 'module-a', 'module-b'
+    
+    rootProject.children.each { project ->
+        project.projectDir = new File(settingsDir, "modules/$fileBaseName")
+    }
+
+> See the [Gradle User Guide section on settings.gradle](http://www.gradle.org/latest/docs/userguide/userguide_single.html#sec:settings_file) for more on configuration of project structure.
+
+So TextMate can correctly target the module you are asking it to, you need to create a script that takes the module path as input and writes its name as output. This script must be located at `.textmate/transform-gradle-project-path` in the root of the project. For our custom project structure outlined above, this file would look like…
+
+    #!/usr/bin/env ruby
+    
+    path = STDIN.read
+    puts path.start_with? "modules:" ? path.sub /^modules:/, "" : path
+
+We are using Ruby here, but it could be anything… it just needs to be an exectuable that takes the default assumed path (i.e. `modules:module-a`) as input and transforms it into the appropriate path (i.e. `module-a`). 
+
+### The Previous Command
+
+The “Run Previous Command” item will always re-run the most recently executed command, regardless of whether it was a project or module targeted command.
 
 ## Running A Single Test
 
