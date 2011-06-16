@@ -30,8 +30,19 @@ module Gradle
         @name.empty? ? task : "#{name}:#{task}"
       end
       
+      def test_single_arg(file = ENV['TM_SELECTED_FILE']) 
+        if file.nil?
+          puts "No file selection"
+          exit 1
+        end
+
+        clazz = File.basename(file, File.extname(file))
+        prefix = @name.empty? ? "" : "#{@name}."
+        "-D#{prefix}test.single=#{clazz}"
+      end
+      
       def test_single(file = ENV['TM_SELECTED_FILE'])
-        run("test", @project.test_single_arg(file))
+        run("test", test_single_arg(file))
       end
       
       def prompt_for_command_and_run
