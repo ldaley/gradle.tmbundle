@@ -27,9 +27,19 @@
 			<string>D052BD31-478C-481C-8016-E09F20C69B76</string>
 			<string>------------------------------------</string>
 			<string>E234D2D4-F08E-4937-9692-A2D7AC7C5870</string>
+			<string>4DCAE241-ECA2-4609-AC5C-12143E75552E</string>
 		</array>
 		<key>submenus</key>
 		<dict>
+			<key>4DCAE241-ECA2-4609-AC5C-12143E75552E</key>
+			<dict>
+				<key>items</key>
+				<array>
+					<string>F0AE9E53-3ABA-4B3F-A076-DB0ACCC63B7C</string>
+				</array>
+				<key>name</key>
+				<string>Control</string>
+			</dict>
 			<key>E234D2D4-F08E-4937-9692-A2D7AC7C5870</key>
 			<dict>
 				<key>items</key>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env bash
+
+PIDS=`jps | grep GradleDaemon | cut -f 1 -d " "`
+NUM=`echo "$PIDS" | wc -l | tr -d " "` 
+
+if [[ -z "$PIDS" ]]; then
+	echo "There are no Gradle Daemon processes running"
+else
+	echo "Killing $NUM Gradle Daemon processes…"
+	echo ""
+	for PID in $PIDS
+	do
+		echo "» kill $PID" 
+		kill "$PID"
+	done
+	echo ""
+	echo "Done."
+fi</string>
+	<key>input</key>
+	<string>none</string>
+	<key>name</key>
+	<string>Kill Gradle Daemon</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>uuid</key>
+	<string>F0AE9E53-3ABA-4B3F-A076-DB0ACCC63B7C</string>
+</dict>
+</plist>
