@@ -202,6 +202,9 @@ module Gradle
             # Colorise the UP-TO-DATE suffix
             str.sub! /UP-TO-DATE/, "<span style='color: Moccasin'>UP-TO-DATE</span>"
 
+            # Colorise the UP-TO-DATE suffix
+            str.sub! /SKIPPED/, "<span style='color: #ABFFE2'>UP-TO-DATE</span>"
+            
             # Colorise the build status
             str.sub! /BUILD SUCCESSFUL/, "<span style='color: green; text-decoration: underline'>BUILD SUCCESSFUL</span>"
             str.sub! /BUILD FAILED/, "<span style='color: red; text-decoration: underline'>BUILD FAILED</span>"
