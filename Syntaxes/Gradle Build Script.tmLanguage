@@ -12,11 +12,58 @@
 	<array>
 		<dict>
 			<key>include</key>
-			<string>#gradle-groovy</string>
+			<string>#gradle</string>
 		</dict>
 	</array>
 	<key>repository</key>
 	<dict>
+		<key>blocks</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(?!&lt;project\.)(\w+)\s*{</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.block.groovy.gradle</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>}</string>
+					<key>name</key>
+					<string>meta.definition.block.groovy.gradle</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#gradle-groovy</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
+		</dict>
+		<key>gradle</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#tasks</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#blocks</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>source.groovy</string>
+				</dict>
+			</array>
+		</dict>
 		<key>gradle-groovy</key>
 		<dict>
 			<key>patterns</key>
@@ -24,6 +71,35 @@
 				<dict>
 					<key>include</key>
 					<string>source.groovy</string>
+				</dict>
+			</array>
+		</dict>
+		<key>tasks</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>task\s+(\w+)\s*(?=[\({])</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.task.groovy.gradle</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>^</string>
+					<key>name</key>
+					<string>meta.definition.task.groovy.gradle</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#gradle-groovy</string>
+						</dict>
+					</array>
 				</dict>
 			</array>
 		</dict>
